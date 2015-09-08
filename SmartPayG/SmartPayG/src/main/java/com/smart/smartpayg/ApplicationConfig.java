@@ -12,7 +12,7 @@ import javax.ws.rs.core.Application;
  *
  * @author Administrator
  */
-@javax.ws.rs.ApplicationPath("/")
+@javax.ws.rs.ApplicationPath("/sp")
 public class ApplicationConfig extends Application {
 
     @Override
@@ -30,6 +30,8 @@ public class ApplicationConfig extends Application {
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(com.smart.common.webService.RESTCorsDemoRequestFilter.class);
         resources.add(com.smart.common.webService.RESTCorsDemoResponseFilter.class);
+        resources.add(com.smart.smartpayg.AccountBindResource.class);
+        resources.add(com.smart.smartpayg.ActOnResource.class);
         resources.add(com.smart.smartpayg.AuthResource.class);
         resources.add(com.smart.smartpayg.MyAccountResource.class);
     }

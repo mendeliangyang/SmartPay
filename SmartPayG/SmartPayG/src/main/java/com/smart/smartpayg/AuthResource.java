@@ -13,7 +13,6 @@ import com.smart.common.SignVerify.SignInformationModel;
 import com.smart.common.UtileSmart;
 import com.smart.common.model.ExecuteResultParam;
 import com.smart.common.model.ResponseResultCode;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
