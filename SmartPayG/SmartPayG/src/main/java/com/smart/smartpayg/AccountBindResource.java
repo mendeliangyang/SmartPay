@@ -145,7 +145,7 @@ public class AccountBindResource {
             if (signModel == null) {
                 return formationResult.formationResult(ResponseResultCode.ErrorSignToken, new ExecuteResultParam("会话无效", param));
             }
-            strSql = String.format("SELECT * FROM AccountBind where UserId='%s'", signModel.Id);
+            strSql = String.format("SELECT a.*,mf.AccountNum as FAcountNum,mf.AccountType as FAccountType,mf.MasterRealName as FMasterRealName,mf.MasterVerifyPhone as FMasterVerifyPhone ,mt.AccountNum as TAcountNum,mt.AccountType as TAccountType,mt.MasterRealName as TMasterRealName,mt.MasterVerifyPhone as TMasterVerifyPhone FROM AccountBind as a left join MyAccount as mf on a.FromAccountId=mf.AccountId left join MyAccount as mt on a.ToAccountId = mt.AccountId where a.UserId='%s'", signModel.Id);
 
             resultList = DBHelper.ExecuteSqlSelectReturnMap(smartPayAnalyzeParam.getRSID(), strSql);
             return formationResult.formationResult(ResponseResultCode.Success, signModel.token, new ExecuteResultParam(resultList, false));

@@ -57,6 +57,7 @@ public class MyAccountResource {
         SignInformationModel signModel = null;
         String strSql = null;
         String strAccountId = null;
+        String selectReultStr = null;
         try {
             //get uName 姓名  uPwd 登录密码
             paramMap = new HashMap<String, Object>();
@@ -73,13 +74,27 @@ public class MyAccountResource {
             if (signModel == null) {
                 return formationResult.formationResult(ResponseResultCode.ErrorSignToken, new ExecuteResultParam("会话无效", param));
             }
-            strAccountId = UtileSmart.getUUID();
             //同账户号不能多次添加，不同的用户可以添加同一个账户。
+            //验证用户名是否正确
+            strSql = String.format("select AccountId from MyAccount where AccountNum='%s' and UserId='%s'", UtileSmart.getStringFromMap(paramMap, paramKey_AccountNum), signModel.Id);
+            selectReultStr = DBHelper.ExecuteSqlSelectOne(smartPayAnalyzeParam.getRSID(), strSql);
+            if (selectReultStr != null) {
+                return formationResult.formationResult(ResponseResultCode.ErrorExistAccount, new ExecuteResultParam("账号已存在", param));
+            }
             //需要调用第三分接口验证帐号信息是否正确
+            strAccountId = UtileSmart.getUUID();
             strSql = String.format("insert into MyAccount (AccountId,AccountNum,AccountType,UserId,MasterRealName,MasterVerifyPhone,PayStatus,PutTime)values('%s','%s',%s,'%s','%s','%s',1,getdate())", strAccountId, UtileSmart.getStringFromMap(paramMap, paramKey_AccountNum), UtileSmart.getStringFromMap(paramMap, paramKey_AccountType), signModel.Id, UtileSmart.getStringFromMap(paramMap, paramKey_MasterRealName), UtileSmart.getStringFromMap(paramMap, paramKey_MasterVerifyPhone));
             resultParam = DBHelper.ExecuteSql(smartPayAnalyzeParam.getRSID(), strSql);
             if (resultParam.ResultCode >= 0) {
+
+                JSONObject resultJson = new JSONObject();
+                resultJson.accumulate("AccountId", strAccountId);
+                if (resultParam.ResultJsonObject == null) {
+                    resultParam.ResultJsonObject = new JSONObject();
+                }
+                resultParam.ResultJsonObject.accumulate(DeployInfo.ResultDataTag, resultJson);
                 return formationResult.formationResult(ResponseResultCode.Success, new ExecuteResultParam(resultParam.ResultJsonObject));
+
             } else {
                 return formationResult.formationResult(ResponseResultCode.Error, new ExecuteResultParam(resultParam.errMsg, param));
             }

@@ -20,13 +20,13 @@ public class ActOnResource {
 
     @Context
     private UriInfo context;
-SmartPayAnalyzeParam smartPayAnalyzeParam = new SmartPayAnalyzeParam();
+    SmartPayAnalyzeParam smartPayAnalyzeParam = new SmartPayAnalyzeParam();
     FormationResult formationResult = new FormationResult();
+
     /**
      * Creates a new instance of ActOnResource
      */
     public ActOnResource() {
     }
 
-    
 }
