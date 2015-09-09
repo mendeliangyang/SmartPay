@@ -33,6 +33,7 @@ public class ApplicationConfig extends Application {
         resources.add(com.smart.smartpayg.AccountBindResource.class);
         resources.add(com.smart.smartpayg.ActOnResource.class);
         resources.add(com.smart.smartpayg.AuthResource.class);
+        resources.add(com.smart.smartpayg.BasicResource.class);
         resources.add(com.smart.smartpayg.MyAccountResource.class);
     }
 

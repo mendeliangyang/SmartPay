@@ -29,32 +29,32 @@ import net.sf.json.JSONObject;
  */
 @Path("Auth")
 public class AuthResource {
-    
+
     @Context
     private UriInfo context;
     SmartPayAnalyzeParam smartPayAnalyzeParam = new SmartPayAnalyzeParam();
     FormationResult formationResult = new FormationResult();
-    
+
     public AuthResource() {
     }
-    
+
     @POST
     @Path("GetVerifyCode")
     public String GetVerifyCode(String param) {
-        
+
         String paramKey_VerifyPhone = "VerifyPhone";
-        
+
         ExecuteResultParam resultParam = null;
         Map<String, Object> paramMap = null;
-        
+
         try {
             //get uName 姓名  uPwd 登录密码
             paramMap = new HashMap<String, Object>();
-            
+
             paramMap.put(paramKey_VerifyPhone, null);
-            
+
             smartPayAnalyzeParam.AnalyzeParamBodyToMap(param, paramMap);
-            
+
             JSONObject resultJson = new JSONObject();
             resultJson.accumulate("VerifyCode", "9999");
             resultParam = new ExecuteResultParam();
@@ -70,32 +70,32 @@ public class AuthResource {
             UtileSmart.FreeObjects(resultParam, param, paramMap);
         }
     }
-    
+
     @POST
     @Path("CheckUserNameUsed")
     public String CheckUserNameUsed(String param) {
-        
+
         String paramKey_UserName = "UserName";
-        
+
         ExecuteResultParam resultParam = null;
         String sqlStr = null, selectReultStr = null;
         Map<String, Object> paramMap = null;
-        
+
         List<String> sqlList = null;
-        
+
         try {
             //get uName 姓名  uPwd 登录密码
             paramMap = new HashMap<String, Object>();
-            
+
             paramMap.put(paramKey_UserName, null);
-            
+
             smartPayAnalyzeParam.AnalyzeParamBodyToMap(param, paramMap);
-            
+
             sqlStr = String.format("SELECT UserId FROM UserDetail where UserName='%s'",
                     UtileSmart.getStringFromMap(paramMap, paramKey_UserName));
-            
+
             selectReultStr = DBHelper.ExecuteSqlSelectOne(smartPayAnalyzeParam.getRSID(), sqlStr);
-            
+
             JSONObject resultJson = new JSONObject();
 
             //获取查询到数据
@@ -117,39 +117,45 @@ public class AuthResource {
             UtileSmart.FreeObjects(resultParam, param, sqlStr, paramMap);
         }
     }
-    
+
     @POST
     @Path("SignUp")
     public String SignUp(String param) {
-        
+
         String paramKey_UserName = "UserName";
         String paramKey_Password = "Password";
         String paramKey_VerifyPhone = "VerifyPhone";
         String paramKey_VerifyCode = "VerifyCode";
-        
+
         ExecuteResultParam resultParam = null;
         String sqlStr = null, selectReultStr = null;
         Map<String, Object> paramMap = null;
-        
+
         List<String> sqlList = null;
-        
+
         try {
             //get uName 姓名  uPwd 登录密码
             paramMap = new HashMap<String, Object>();
-            
+
             paramMap.put(paramKey_UserName, null);
             paramMap.put(paramKey_Password, null);
             paramMap.put(paramKey_VerifyPhone, null);
             paramMap.put(paramKey_VerifyCode, null);
-            
+
             smartPayAnalyzeParam.AnalyzeParamBodyToMap(param, paramMap);
 
             //判断verifyCode，
             //注册码无效，返回错误
+            //验证用户名是否正确
+            sqlStr = String.format("select UserId from UserDetail where UserName='%s'", UtileSmart.getStringFromMap(paramMap, paramKey_UserName));
+            selectReultStr = DBHelper.ExecuteSqlSelectOne(smartPayAnalyzeParam.getRSID(), sqlStr);
+            if (selectReultStr != null) {
+                return formationResult.formationResult(ResponseResultCode.ErrorExistUser, new ExecuteResultParam("用户名已经存在。", param));
+            }
             //进行注册
             String userId = UtileSmart.getUUID();
             sqlStr = String.format("insert into UserDetail (UserId,UserName,Password,VerifyPhone)values('%s','%s','%s','%s')", userId, UtileSmart.getStringFromMap(paramMap, paramKey_UserName), UtileSmart.getStringFromMap(paramMap, paramKey_Password), UtileSmart.getStringFromMap(paramMap, paramKey_VerifyPhone));
-            
+
             resultParam = DBHelper.ExecuteSql(smartPayAnalyzeParam.getRSID(), sqlStr);
             if (resultParam.ResultCode >= 0) {
                 JSONObject resultJson = new JSONObject();
@@ -162,7 +168,7 @@ public class AuthResource {
             } else {
                 return formationResult.formationResult(ResponseResultCode.Error, new ExecuteResultParam(resultParam.errMsg, param));
             }
-            
+
         } catch (Exception e) {
             return formationResult.formationResult(ResponseResultCode.Error, new ExecuteResultParam(e.getLocalizedMessage(), param, e));
         } finally {
@@ -170,33 +176,33 @@ public class AuthResource {
             UtileSmart.FreeObjects(resultParam, param, sqlStr, paramMap);
         }
     }
-    
+
     @POST
     @Path("SignIn")
     public String SignIn(String param) {
-        
+
         String paramKey_Password = "Password";
         String paramKey_UserName = "UserName";
-        
+
         ExecuteResultParam resultParam = null;
         String sqlStr = null;
         Map<String, Object> paramMap = null;
         Map<String, Map<String, String>> dbResultMap = null;
-        
+
         List<String> sqlList = null;
-        
+
         try {
             //get uName 姓名  uPwd 登录密码
             paramMap = new HashMap<String, Object>();
-            
+
             paramMap.put(paramKey_Password, null);
             paramMap.put(paramKey_UserName, null);
-            
+
             smartPayAnalyzeParam.AnalyzeParamBodyToMap(param, paramMap);
 
             //获取用户信息
             sqlStr = String.format("SELECT * FROM UserDetail where UserName='%s' and Password='%s'", UtileSmart.getStringFromMap(paramMap, paramKey_UserName), UtileSmart.getStringFromMap(paramMap, paramKey_Password));
-            
+
             dbResultMap = DBHelper.ExecuteSqlSelectReturnMap(smartPayAnalyzeParam.getRSID(), sqlStr, "UserDetail");
             if (dbResultMap == null || dbResultMap.size() == 0) {
                 //密码错误，提示密码错误
@@ -213,43 +219,43 @@ public class AuthResource {
             UtileSmart.FreeObjects(resultParam, param, sqlStr, paramMap);
         }
     }
-    
+
     @POST
     @Path("SignOut")
     public String SignOut(String param) {
-        
+
         try {
             smartPayAnalyzeParam.AnalyzeParamBodyToMap(param, null);
             smartPayAnalyzeParam.getToken();
             SignCommon.SignOut(smartPayAnalyzeParam.getToken());
             return formationResult.formationResult(ResponseResultCode.Success, new ExecuteResultParam());
-            
+
         } catch (Exception e) {
             return formationResult.formationResult(ResponseResultCode.Error, new ExecuteResultParam(e.getLocalizedMessage(), param, e));
         } finally {
             UtileSmart.FreeObjects(param);
         }
     }
-    
+
     @POST
     @Path("ModifyUserPassword")
     public String ModifyUserPassword(String param) {
-        
+
         String paramKey_Password = "Password";
         String paramKey_OldPassword = "OldPassword";
-        
+
         ExecuteResultParam resultParam = null;
         String sqlStr = null, selectReultStr = null;
         Map<String, Object> paramMap = null;
         SignInformationModel signModel = null;
-        
+
         try {
             //get uName 姓名  uPwd 登录密码
             paramMap = new HashMap<String, Object>();
-            
+
             paramMap.put(paramKey_OldPassword, null);
             paramMap.put(paramKey_Password, null);
-            
+
             smartPayAnalyzeParam.AnalyzeParamBodyToMap(param, paramMap);
             signModel = SignCommon.verifySign(smartPayAnalyzeParam.getToken(), false);
             if (signModel == null) {
@@ -272,7 +278,7 @@ public class AuthResource {
             } else {
                 return formationResult.formationResult(ResponseResultCode.Error, new ExecuteResultParam(resultParam.errMsg, param));
             }
-            
+
         } catch (Exception e) {
             return formationResult.formationResult(ResponseResultCode.Error, new ExecuteResultParam(e.getLocalizedMessage(), param, e));
         } finally {
@@ -280,26 +286,26 @@ public class AuthResource {
             UtileSmart.FreeObjects(resultParam, param, sqlStr, paramMap);
         }
     }
-    
+
     @POST
     @Path("FindMyPassword")
     public String FindMyPassword(String param) {
-        
+
         String paramKey_Password = "Password";
         String paramKey_UserName = "UserName";
         String paramKey_VerifyCode = "VerifyCode";
-        
+
         ExecuteResultParam resultParam = null;
         String sqlStr = null, selectReultStr = null;
         Map<String, Object> paramMap = null;
         try {
             //get uName 姓名  uPwd 登录密码
             paramMap = new HashMap<String, Object>();
-            
+
             paramMap.put(paramKey_UserName, null);
             paramMap.put(paramKey_Password, null);
             paramMap.put(paramKey_VerifyCode, null);
-            
+
             smartPayAnalyzeParam.AnalyzeParamBodyToMap(param, paramMap);
             //验证用户名是否正确
             sqlStr = String.format("select UserId from UserDetail where UserName='%s'", UtileSmart.getStringFromMap(paramMap, paramKey_UserName));
@@ -315,7 +321,7 @@ public class AuthResource {
             } else {
                 return formationResult.formationResult(ResponseResultCode.Error, new ExecuteResultParam(resultParam.errMsg, param));
             }
-            
+
         } catch (Exception e) {
             return formationResult.formationResult(ResponseResultCode.Error, new ExecuteResultParam(e.getLocalizedMessage(), param, e));
         } finally {
@@ -323,15 +329,15 @@ public class AuthResource {
             UtileSmart.FreeObjects(resultParam, param, sqlStr, paramMap);
         }
     }
-    
+
     @POST
     @Path("ModifyVerifyPhone")
     public String ModifyVerifyPhone(String param) {
-        
+
         String paramKey_Password = "Password";
         String paramKey_VerifyCode = "VerifyCode";
         String paramKey_VerifyPhone = "VerifyPhone";
-        
+
         ExecuteResultParam resultParam = null;
         String sqlStr = null, selectReultStr = null;
         Map<String, Object> paramMap = null;
@@ -339,11 +345,11 @@ public class AuthResource {
         try {
             //get uName 姓名  uPwd 登录密码
             paramMap = new HashMap<String, Object>();
-            
+
             paramMap.put(paramKey_Password, null);
             paramMap.put(paramKey_VerifyCode, null);
             paramMap.put(paramKey_VerifyPhone, null);
-            
+
             smartPayAnalyzeParam.AnalyzeParamBodyToMap(param, paramMap);
             smartPayAnalyzeParam.AnalyzeParamBodyToMap(param, paramMap);
             signModel = SignCommon.verifySign(smartPayAnalyzeParam.getToken(), false);
@@ -374,16 +380,16 @@ public class AuthResource {
             UtileSmart.FreeObjects(resultParam, param, sqlStr, paramMap);
         }
     }
-    
+
     @POST
     @Path("ModifyUserDetail")
     public String ModifyUserDetail(String param) {
-        
+
         String paramKey_RealName = "RealName";
         String paramKey_Gender = "Gender";
         String paramKey_Birthday = "Birthday";
         String paramKey_IdCard = "IdCard";
-        
+
         ExecuteResultParam resultParam = null;
         String sqlStr = null, selectReultStr = null;
         Map<String, Object> paramMap = null;
@@ -391,12 +397,12 @@ public class AuthResource {
         try {
             //get uName 姓名  uPwd 登录密码
             paramMap = new HashMap<String, Object>();
-            
+
             paramMap.put(paramKey_RealName, null);
             paramMap.put(paramKey_Gender, null);
             paramMap.put(paramKey_Birthday, null);
             paramMap.put(paramKey_IdCard, null);
-            
+
             smartPayAnalyzeParam.AnalyzeParamBodyToMap(param, paramMap);
             smartPayAnalyzeParam.AnalyzeParamBodyToMap(param, paramMap);
             signModel = SignCommon.verifySign(smartPayAnalyzeParam.getToken(), false);
@@ -417,5 +423,5 @@ public class AuthResource {
             UtileSmart.FreeObjects(resultParam, param, sqlStr, paramMap);
         }
     }
-    
+
 }
