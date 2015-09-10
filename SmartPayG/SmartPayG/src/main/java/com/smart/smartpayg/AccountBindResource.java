@@ -6,6 +6,7 @@
 package com.smart.smartpayg;
 
 import com.smart.common.DBHelper;
+import com.smart.common.DeployInfo;
 import com.smart.common.FormationResult;
 import com.smart.common.SignVerify.SignCommon;
 import com.smart.common.SignVerify.SignInformationModel;
@@ -20,6 +21,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import net.sf.json.JSONObject;
 
 /**
  * REST Web Service
@@ -50,7 +52,7 @@ public class AccountBindResource {
 
         ExecuteResultParam resultParam = null;
         Map<String, Object> paramMap = null;
-        String strSql = null;
+        String strSql = null, strTempResult = null;
         String accountBindId = null;
         SignInformationModel signModel = null;
         try {
@@ -67,10 +69,35 @@ public class AccountBindResource {
                 return formationResult.formationResult(ResponseResultCode.ErrorSignToken, new ExecuteResultParam("会话无效", param));
             }
             accountBindId = UtileSmart.getUUID();
+            //判断账号信息是否存在
+            //验证用户名是否正确
+            strSql = String.format("select AccountId from MyAccount where AccountId='%s'", UtileSmart.getStringFromMap(paramMap, paramKey_FromAccountId));
+            strTempResult = DBHelper.ExecuteSqlSelectOne(smartPayAnalyzeParam.getRSID(), strSql);
+            if (strTempResult == null || strTempResult.isEmpty()) {
+                return formationResult.formationResult(ResponseResultCode.ErrorUnExistAccount, new ExecuteResultParam(UtileSmart.getStringFromMap(paramMap, paramKey_FromAccountId), param));
+            }
+            strSql = String.format("select AccountId from MyAccount where AccountId='%s'", UtileSmart.getStringFromMap(paramMap, paramKey_ToAccountId));
+            strTempResult = DBHelper.ExecuteSqlSelectOne(smartPayAnalyzeParam.getRSID(), strSql);
+            if (strTempResult == null || strTempResult.isEmpty()) {
+                return formationResult.formationResult(ResponseResultCode.ErrorUnExistAccount, new ExecuteResultParam(UtileSmart.getStringFromMap(paramMap, paramKey_ToAccountId), param));
+            }
+            //判断绑定关系是否存在
+            strSql = String.format("select AccountBindId from AccountBind where FromAccountId='%s' and ToAccountId='%s' and UserId='%s'",
+                    UtileSmart.getStringFromMap(paramMap, paramKey_FromAccountId), UtileSmart.getStringFromMap(paramMap, paramKey_ToAccountId), signModel.Id);
+            strTempResult = DBHelper.ExecuteSqlSelectOne(smartPayAnalyzeParam.getRSID(), strSql);
+            if (strTempResult != null ) {
+                return formationResult.formationResult(ResponseResultCode.ErrorExistAccountBind, new ExecuteResultParam("关系已绑定", param));
+            }
 
             strSql = String.format("insert into AccountBind (AccountBindId,FromAccountId,ToAccountId,UserId,PutTime) values ('%s','%s','%s','%s',getdate())", accountBindId, UtileSmart.getStringFromMap(paramMap, paramKey_FromAccountId), UtileSmart.getStringFromMap(paramMap, paramKey_ToAccountId), signModel.Id);
             resultParam = DBHelper.ExecuteSql(smartPayAnalyzeParam.getRSID(), strSql);
             if (resultParam.ResultCode >= 0) {
+                JSONObject resultJson = new JSONObject();
+                resultJson.accumulate("AccountBindId", accountBindId);
+                if (resultParam.ResultJsonObject == null) {
+                    resultParam.ResultJsonObject = new JSONObject();
+                }
+                resultParam.ResultJsonObject.accumulate(DeployInfo.ResultDataTag, resultJson);
                 return formationResult.formationResult(ResponseResultCode.Success, new ExecuteResultParam(resultParam.ResultJsonObject));
             } else {
                 return formationResult.formationResult(ResponseResultCode.Error, new ExecuteResultParam(resultParam.errMsg, param));

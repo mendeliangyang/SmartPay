@@ -1,0 +1,44 @@
+Thu Sep 10 15:03:14 CST 2015
+C:\Users\Administrator\.m2\repository\com\jcabi\jcabi-aspects\0.22\jcabi-aspects-0.22.jar!com\jcabi\aspects\aj\MethodValidator.class [warning] can not build thisJoinPoint lazily for this advice since it has no suitable guard [Xlint:noGuardForLazyTjp]
+	
+C:\Users\Administrator\.m2\repository\com\jcabi\jcabi-aspects\0.22\jcabi-aspects-0.22.jar!com\jcabi\aspects\aj\MethodValidator.class [warning] can not build thisJoinPoint lazily for this advice since it has no suitable guard [Xlint:noGuardForLazyTjp]
+	
+C:\Users\Administrator\.m2\repository\com\jcabi\jcabi-aspects\0.22\jcabi-aspects-0.22.jar!com\jcabi\aspects\aj\MethodValidator.class [warning] can not build thisJoinPoint lazily for this advice since it has no suitable guard [Xlint:noGuardForLazyTjp]
+	
+C:\Users\Administrator\.m2\repository\com\jcabi\jcabi-aspects\0.22\jcabi-aspects-0.22.jar!com\jcabi\aspects\aj\MethodScheduler.class [warning] can not build thisJoinPoint lazily for this advice since it has no suitable guard [Xlint:noGuardForLazyTjp]
+	
+C:\Users\Administrator\.m2\repository\com\jcabi\jcabi-aspects\0.22\jcabi-aspects-0.22.jar!com\jcabi\aspects\aj\MethodScheduler.class [warning] can not build thisJoinPoint lazily for this advice since it has no suitable guard [Xlint:noGuardForLazyTjp]
+	
+C:\Users\Administrator\.m2\repository\com\jcabi\jcabi-aspects\0.22\jcabi-aspects-0.22.jar!com\jcabi\aspects\aj\ImmutabilityChecker.class [warning] can not build thisJoinPoint lazily for this advice since it has no suitable guard [Xlint:noGuardForLazyTjp]
+	
+C:\Users\Administrator\.m2\repository\com\jcabi\jcabi-aspects\0.22\jcabi-aspects-0.22.jar!com\jcabi\aspects\aj\MethodCacher.class [warning] can not build thisJoinPoint lazily for this advice since it has no suitable guard [Xlint:noGuardForLazyTjp]
+	
+C:\Users\Administrator\.m2\repository\com\jcabi\jcabi-aspects\0.22\jcabi-aspects-0.22.jar!com\jcabi\aspects\aj\MethodCacher.class [warning] can not build thisJoinPoint lazily for this advice since it has no suitable guard [Xlint:noGuardForLazyTjp]
+	
+com\smart\smartpayg\AuthResource.java:127 [warning] can not implement lazyTjp on this joinpoint method-execution(java.lang.String com.smart.smartpayg.AuthResource.SignUp(java.lang.String)) because around advice is used [Xlint:canNotImplementLazyTjp]
+	
+	see also: C:\Users\Administrator\.m2\repository\com\jcabi\jcabi-aspects\0.22\jcabi-aspects-0.22.jar!com\jcabi\aspects\aj\MethodLogger.class::0
+C:\Users\Administrator\.m2\repository\com\jcabi\jcabi-aspects\0.22\jcabi-aspects-0.22.jar!com\jcabi\aspects\aj\MethodLogger.class [warning] advice defined in com.jcabi.aspects.aj.MethodLogger has not been applied [Xlint:adviceDidNotMatch]
+	
+C:\Users\Administrator\.m2\repository\com\jcabi\jcabi-aspects\0.22\jcabi-aspects-0.22.jar!com\jcabi\aspects\aj\MethodScheduler.class [warning] advice defined in com.jcabi.aspects.aj.MethodScheduler has not been applied [Xlint:adviceDidNotMatch]
+	
+C:\Users\Administrator\.m2\repository\com\jcabi\jcabi-aspects\0.22\jcabi-aspects-0.22.jar!com\jcabi\aspects\aj\ImmutabilityChecker.class [warning] advice defined in com.jcabi.aspects.aj.ImmutabilityChecker has not been applied [Xlint:adviceDidNotMatch]
+	
+C:\Users\Administrator\.m2\repository\com\jcabi\jcabi-aspects\0.22\jcabi-aspects-0.22.jar!com\jcabi\aspects\aj\ExceptionsLogger.class [warning] advice defined in com.jcabi.aspects.aj.ExceptionsLogger has not been applied [Xlint:adviceDidNotMatch]
+	
+C:\Users\Administrator\.m2\repository\com\jcabi\jcabi-aspects\0.22\jcabi-aspects-0.22.jar!com\jcabi\aspects\aj\Repeater.class [warning] advice defined in com.jcabi.aspects.aj.Repeater has not been applied [Xlint:adviceDidNotMatch]
+	
+C:\Users\Administrator\.m2\repository\com\jcabi\jcabi-aspects\0.22\jcabi-aspects-0.22.jar!com\jcabi\aspects\aj\MethodValidator.class [warning] advice defined in com.jcabi.aspects.aj.MethodValidator has not been applied [Xlint:adviceDidNotMatch]
+	
+C:\Users\Administrator\.m2\repository\com\jcabi\jcabi-aspects\0.22\jcabi-aspects-0.22.jar!com\jcabi\aspects\aj\SingleException.class [warning] advice defined in com.jcabi.aspects.aj.SingleException has not been applied [Xlint:adviceDidNotMatch]
+	
+C:\Users\Administrator\.m2\repository\com\jcabi\jcabi-aspects\0.22\jcabi-aspects-0.22.jar!com\jcabi\aspects\aj\MethodInterrupter.class [warning] advice defined in com.jcabi.aspects.aj.MethodInterrupter has not been applied [Xlint:adviceDidNotMatch]
+	
+C:\Users\Administrator\.m2\repository\com\jcabi\jcabi-aspects\0.22\jcabi-aspects-0.22.jar!com\jcabi\aspects\aj\QuietExceptionsLogger.class [warning] advice defined in com.jcabi.aspects.aj.QuietExceptionsLogger has not been applied [Xlint:adviceDidNotMatch]
+	
+C:\Users\Administrator\.m2\repository\com\jcabi\jcabi-aspects\0.22\jcabi-aspects-0.22.jar!com\jcabi\aspects\aj\Parallelizer.class [warning] advice defined in com.jcabi.aspects.aj.Parallelizer has not been applied [Xlint:adviceDidNotMatch]
+	
+C:\Users\Administrator\.m2\repository\com\jcabi\jcabi-aspects\0.22\jcabi-aspects-0.22.jar!com\jcabi\aspects\aj\MethodCacher.class [warning] advice defined in com.jcabi.aspects.aj.MethodCacher has not been applied [Xlint:adviceDidNotMatch]
+	
+C:\Users\Administrator\.m2\repository\com\jcabi\jcabi-aspects\0.22\jcabi-aspects-0.22.jar!com\jcabi\aspects\aj\MethodAsyncRunner.class [warning] advice defined in com.jcabi.aspects.aj.MethodAsyncRunner has not been applied [Xlint:adviceDidNotMatch]
+	
