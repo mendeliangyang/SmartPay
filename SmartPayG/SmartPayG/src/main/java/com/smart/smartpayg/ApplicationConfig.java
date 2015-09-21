@@ -35,6 +35,7 @@ public class ApplicationConfig extends Application {
         resources.add(com.smart.smartpayg.AuthResource.class);
         resources.add(com.smart.smartpayg.BasicResource.class);
         resources.add(com.smart.smartpayg.MyAccountResource.class);
+        resources.add(com.smart.smartpayg.cgbBank.ShiftPayResource.class);
     }
 
 }

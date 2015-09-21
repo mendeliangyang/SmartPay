@@ -10,13 +10,14 @@
        http://camel.apache.org/schema/spring 
        http://camel.apache.org/schema/spring/camel-spring.xsd">
     
-    <bean id="ibikestationProcess" class="com.smart.smartexchangem.zst.ibikestationPorcess"/>
     
+    <bean id="cgbRoutesManage" class="com.smart.smartpayg.cgbBank.CodeExecution"/>
     <import resource="SmartPayRoutes.xml"/>
- 
+
     <camelContext id="mainRoute" xmlns="http://camel.apache.org/schema/spring">
         <routeContextRef ref="spRoutes"/>
     </camelContext>
+    
 </beans>
 
 

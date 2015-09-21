@@ -6,8 +6,44 @@
        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd 
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd
     ">
+    <!--木林森-->
+    <bean id="searchOverageProcess" class="com.smart.smartpayg.TreeWorldProcess.SearchOverageProcess"/>
+    
+    <!--广发-->
+    <bean id="cgbClientClannelFactory" class="com.smart.smartpayg.cgbBank.cgbInitializerFactory.CGBClientChannelPipelineFactory"/>
+    <bean id="cgbServerInitalFactory" class="com.smart.smartpayg.cgbBank.cgbInitializerFactory.CGBServerInitalFactory"/>
+    
+    <bean id="shiftPayProcess" class="com.smart.smartpayg.cgbBank.ShiftPay"/>
+    <bean id="shiftPayedProcess" class="com.smart.smartpayg.cgbBank.ShiftPayed"/>
+    
     <routeContext id="spRoutes" xmlns="http://camel.apache.org/schema/spring">
         
+        <route id="searchOverageDirect">
+            <from uri="direct:searchOverageCamelProcess"/>
+            <removeHeaders pattern="CamelHttp*"/>
+            <to uri="http://192.168.169.250:8007/TreeWorld/webresources/EmployeeAccount/SearchConsumeRecord"/>        
+        </route>
+        
+        <route id="searchOverageRoute">
+            <from uri="jetty:http://0.0.0.0:8009/SmartPayG/sp/TreeWorld/SearchConsumeRecord"/>
+            <removeHeaders pattern="CamelHttp*"/>
+            <process ref="searchOverageProcess"/>
+            <to uri="direct:searchOverageCamelProcess"/>        
+        </route>
+        
+        <route id="shiftPayRoute">
+            <from uri="jetty:http://0.0.0.0:8009/SmartPayG/sp/cgb/shiftPayRoute"/>
+            <removeHeaders pattern="CamelHttp*"/>
+            <process ref="searchOverageProcess"/>
+            <to uri="direct:shiftPayDirect"/>        
+        </route>
+        <route id="shiftPayDirect">
+            <from uri="direct:shiftPayDirect"/>
+            <process ref="shiftPayProcess"/>
+            <to uri="netty4:tcp://192.168.169.250:4000?serverInitializerFactory=#cgbServerInitalFactory&amp;clientInitializerFactory=#cgbClientClannelFactory&amp;textline=true&amp;synchronous=true&amp;sendBufferSize=65536&amp;receiveBufferSize=65536"/>   
+            <!--<to uri="netty4:tcp://192.168.169.250:4000?textline=true"/>-->             
+            <process ref="shiftPayedProcess"/>
+        </route>
        
     </routeContext>
  
