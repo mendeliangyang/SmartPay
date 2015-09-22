@@ -128,7 +128,6 @@ public class AccountBindResource {
 
             smartPayAnalyzeParam.AnalyzeParamBodyToMap(param, paramMap);
 
-            smartPayAnalyzeParam.AnalyzeParamBodyToMap(param, paramMap);
             signModel = SignCommon.verifySign(smartPayAnalyzeParam.getToken(), false);
             if (signModel == null) {
                 return formationResult.formationResult(ResponseResultCode.ErrorSignToken, new ExecuteResultParam("会话无效", param));
@@ -167,7 +166,6 @@ public class AccountBindResource {
 
             smartPayAnalyzeParam.AnalyzeParamBodyToMap(param, paramMap);
 
-            smartPayAnalyzeParam.AnalyzeParamBodyToMap(param, paramMap);
             signModel = SignCommon.verifySign(smartPayAnalyzeParam.getToken(), false);
             if (signModel == null) {
                 return formationResult.formationResult(ResponseResultCode.ErrorSignToken, new ExecuteResultParam("会话无效", param));
