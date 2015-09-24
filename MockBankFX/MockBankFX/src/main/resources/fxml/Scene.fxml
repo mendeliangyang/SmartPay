@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="700" prefWidth="600" xmlns:fx="http://javafx.com/fxml" fx:controller="com.smart.mockbankfx.FXMLController">
+    <children>
+        <Button layoutX="10" layoutY="10" text="start service" onAction="#handleButtonAction" fx:id="button" />
+        <TextArea layoutX="10" layoutY="70" minHeight="600" minWidth="570"   fx:id="label" />
+    </children>
+</AnchorPane>
