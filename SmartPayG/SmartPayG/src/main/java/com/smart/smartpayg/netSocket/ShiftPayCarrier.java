@@ -25,6 +25,7 @@ public class ShiftPayCarrier {
         mcenterBranchNum = "138070".toCharArray();
         dealType = "0502".toCharArray();
         appCode = "....".toCharArray();
+        mac = "FFFFFFFF".toCharArray();
     }
 
     public byte[] toData() {
